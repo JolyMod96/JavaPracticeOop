@@ -43,14 +43,28 @@ public class Complex {
     }
 
     public Complex plus(Complex complex) {
-
+        return new Complex((this.real + complex.real), (this.imaginary + complex.imaginary));
     }
 
     public Complex minus(Complex complex) {
-
+        return new Complex((this.real - complex.real), (this.imaginary - complex.imaginary));
     }
 
     public Complex times(Complex complex) {
+        return new Complex((this.real * complex.real - this.imaginary * this.imaginary), (this.real * complex.imaginary + this.imaginary * complex.real));
+    }
 
+    @Override
+    public String toString() {
+        if (this.imaginary == 0) {
+            return Double.toString(this.real);
+        }
+        else if (this.real <= 0) {
+            return this.imaginary + "i";
+        }
+        else if (imaginary < 0) {
+            return this.real + " - " + (-this.imaginary) +"i";
+        }
+        return this.real + " + " + this.imaginary +"i";
     }
 }

@@ -37,22 +37,38 @@ public class Money {
         System.out.println(this.hryvnia+","+this.kopecks);
     }
 
-    // TODO:Реализовать методы арифметических операций
-
     public Money addition(Money money) {
-        return new Money();
+        Money result = new Money(this.hryvnia + money.hryvnia, (byte)(this.kopecks + money.kopecks));
+        if(result.kopecks > 99) {
+            result.kopecks -= 100;
+            result.hryvnia += 1;
+        }
+        return result;
     }
 
     public Money subtraction(Money money) {
-        return new Money();
+        Money result = new Money(this.hryvnia - money.hryvnia, (byte)(this.kopecks - money.kopecks));
+        if(result.kopecks < 0) {
+            result.hryvnia -= Math.ceil(-1 * (kopecks / 100));
+            result.kopecks += 100 * Math.ceil(-1 * (kopecks / 100));
+        }
+        return result;
     }
 
-    public Money division(double money) {
-        return new Money();
+    public Money division(double count) {
+        return new Money((long)Math.floor(this.hryvnia / count), (byte) Math.floor(this.kopecks / count));
     }
 
-    public Money multiply(double money) {
-        return new Money();
+    public Money multiply(double count) {
+        Money result = new Money((long)Math.floor(this.hryvnia * count));
+        double kopecks = this.kopecks * count;
+        int x = (int)Math.floor(kopecks / 100);
+        if(x > 0) {
+            kopecks -= x * 100;
+            result.hryvnia += x;
+        }
+        result.kopecks = (byte)kopecks;
+        return result;
     }
 
     public boolean equals(Money money) {

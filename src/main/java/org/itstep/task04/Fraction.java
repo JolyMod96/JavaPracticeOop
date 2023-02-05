@@ -20,51 +20,48 @@ public class Fraction {
         this.denominator = denominator;
     }
 
-    // TODO:Решить проблему с математическими операциями
+    // Не сильно вышло с математическими операциями
 
-    private int GCD(int x, int y) {
-        int r = 0;
-        int a = Math.max(x, y);
-        int b = Math.min(x, y);
-        r = b;
-        while(a % b != 0) {
-            r = a % b;
-            a = b;
-            b = r;
+    private int gcd(int x, int y) {
+        x = Math.abs(x);
+        y = Math.abs(y);
+        if (y == 0) {
+            return x;
         }
-        return r;
+        else {
+            return gcd(y, x % y);
+        }
+    }
+
+    private Fraction normalize(int numerator, int denominator) {
+        return normalize(new Fraction(numerator, denominator));
+    }
+
+    private Fraction normalize(Fraction fraction) {
+        int gcd = gcd(numerator, denominator);
+        if (denominator == 0) {
+            throw new ArithmeticException("Division by zero");
+        }
+        else if (denominator < 0) {
+            return new Fraction(numerator * -1 / gcd, denominator * -1 / gcd);
+        }
+        return new Fraction(numerator / gcd, denominator / gcd);
     }
 
     public Fraction addition(Fraction fraction) {
-        Fraction result = new Fraction(this.numerator * fraction.denominator + fraction.numerator * this.denominator , fraction.numerator * fraction.denominator);
-        int gcd = this.GCD(Math.abs(result.numerator), Math.abs(result.denominator));
-        result.numerator /= gcd;
-        result.denominator /= gcd;
-        return result;
+        return normalize(new Fraction(this.numerator * fraction.denominator + this.denominator * fraction.numerator, this.denominator * fraction.denominator));
     }
 
     public Fraction subtraction(Fraction fraction) {
-        Fraction result = new Fraction(this.numerator * fraction.denominator - fraction.numerator * this.denominator , fraction.numerator * fraction.denominator);
-        int gcd = this.GCD(Math.abs(result.numerator), Math.abs(result.denominator));
-        result.numerator /= gcd;
-        result.denominator /= gcd;
-        return result;
+        return normalize(new Fraction(this.numerator * fraction.denominator - this.denominator * fraction.numerator, this.denominator * fraction.denominator));
     }
 
     public Fraction multiplication(Fraction fraction) {
-        Fraction result = new Fraction(this.numerator * fraction.denominator * fraction.numerator * this.denominator , fraction.numerator * fraction.denominator);
-        int gcd = this.GCD(Math.abs(result.numerator), Math.abs(result.denominator));
-        result.numerator /= gcd;
-        result.denominator /= gcd;
-        return result;
+        return normalize(new Fraction(this.numerator * fraction.numerator, this.denominator * fraction.denominator));
     }
 
     public Fraction division(Fraction fraction) {
-        Fraction result = new Fraction(this.numerator * fraction.denominator / fraction.numerator * this.denominator , fraction.numerator * fraction.denominator);
-        int gcd = this.GCD(Math.abs(result.numerator), Math.abs(result.denominator));
-        result.numerator /= gcd;
-        result.denominator /= gcd;
-        return result;
+        return normalize(new Fraction(this.numerator * fraction.denominator, this.denominator * fraction.numerator));
     }
 
     public Fraction() {
@@ -73,7 +70,7 @@ public class Fraction {
 
     public Fraction(int numerator, int denominator) {
         if(denominator == 0) {
-            throw new ArithmeticException();
+            throw new ArithmeticException("Division by zero");
         }
         this.numerator = numerator;
         this.denominator = denominator;
